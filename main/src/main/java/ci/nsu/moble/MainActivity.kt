@@ -86,7 +86,9 @@ class MainActivity : ComponentActivity() {
                 label = { Text("Продукт") }
             )
             Button(
-                onClick = {viewModel.addItem()},
+                onClick = {
+                    viewModel.addItem()
+                    newItemText = "" },
             ) {
                 Text("Добавить")
             }
