@@ -1,6 +1,7 @@
 package ci.nsu.moble.main
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -53,7 +54,8 @@ fun SecondActivityScreen() {
     val context = LocalContext.current
     var receivedText by remember { mutableStateOf("") }
     if (context is Activity) {
-        receivedText = context.intent.getStringExtra("text_data") ?: "No text received"
+        val intentText = context.intent.getStringExtra("text_data")
+        receivedText = if (intentText.isNullOrBlank()) "Текста нет" else intentText
     }
 
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
@@ -61,6 +63,9 @@ fun SecondActivityScreen() {
             title = { Text(receivedText) }, navigationIcon = {
                 IconButton(onClick = {
                     // TODO: create intent and start MainActivity
+                    val intent = Intent(context, MainActivity::class.java).apply{
+                    }
+                    context.startActivity(intent)
                     if (context is Activity) {
                         context.finish()
                     }

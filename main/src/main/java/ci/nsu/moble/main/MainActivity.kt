@@ -1,5 +1,6 @@
 package ci.nsu.moble.main
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -63,6 +64,9 @@ fun MainScreenActivity(modifier: Modifier = Modifier) {
                     putExtra("text_data", text)
                 }
                 context.startActivity(intent)
+                if (context is Activity) {
+                    context.finish()
+                }
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
