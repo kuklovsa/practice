@@ -31,6 +31,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import ci.nsu.moble.main.ui.theme.PracticeTheme
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.compose.foundation.layout.padding
+import ci.nsu.moble.main.ui.Screens.HomeScreen
+import ci.nsu.moble.main.ui.Screens.ScreenOneContent
+import ci.nsu.moble.main.ui.Screens.ScreenTwoContent
 
 // TODO: crate sealed class with 3 routes
 
@@ -45,11 +52,18 @@ class SecondActivity : ComponentActivity() {
         }
     }
 }
+sealed class Screen(val route: String) {
+    object Home : Screen("HomeScreen")
+    object ScreenOne : Screen("ScreenOne")
+    object ScreenTwo : Screen("ScreenTwo")
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecondActivityScreen() {
-    // todo: create nav controller
+    // readyTODO: create nav controller
+    val navController = rememberNavController()
     var selectedItem by remember { mutableStateOf(0) }
     val context = LocalContext.current
     var receivedText by remember { mutableStateOf("") }
@@ -58,11 +72,12 @@ fun SecondActivityScreen() {
         receivedText = if (intentText.isNullOrBlank()) "Текста нет" else intentText
     }
 
+
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(
             title = { Text(receivedText) }, navigationIcon = {
                 IconButton(onClick = {
-                    // TODO: create intent and start MainActivity
+                    // readyTODO: create intent and start MainActivity
                     val intent = Intent(context, MainActivity::class.java).apply{
                     }
                     context.startActivity(intent)
@@ -88,7 +103,8 @@ fun SecondActivityScreen() {
                 selected = selectedItem == 0,
 
                 onClick = {
-                    // TODO: navigate to home screen by navController
+                    // readyTODO: navigate to home screen by navController
+                    navController.navigate(Screen.Home.route)
                     selectedItem = 0
                 })
             NavigationBarItem(
@@ -97,7 +113,8 @@ fun SecondActivityScreen() {
                 selected = selectedItem == 1,
 
                 onClick = {
-                    // TODO: navigate to screen one
+                    // readyTODO: navigate to screen one
+                    navController.navigate(Screen.ScreenOne.route)
                     selectedItem = 1
                 })
             NavigationBarItem(
@@ -105,14 +122,22 @@ fun SecondActivityScreen() {
                 label = { Text("Screen Two") },
                 selected = selectedItem == 2,
                 onClick = {
-                    // TODO: navigate to screen two
+                    // readyTODO: navigate to screen two
+                    navController.navigate(Screen.ScreenTwo.route)
                     selectedItem = 2
                 })
         }
     }) { innerPadding ->
-        // TODO: create a nav graph with 3 screens
-        // NavHost() {}
-        // composable(Screen.Home.route) { HomeScreen() }
+        // readyTODO: create a nav graph with 3 screens
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Screen.Home.route) { HomeScreen() }
+            composable(Screen.ScreenOne.route) { ScreenOneContent() }
+            composable(Screen.ScreenTwo.route) { ScreenTwoContent() }
+        }
     }
 }
 

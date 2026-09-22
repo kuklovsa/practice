@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-// TODO:  here is to open the second activity
+// readyTODO:  here is to open the second activity
 @Composable
 fun MainScreenActivity(modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
@@ -51,7 +51,7 @@ fun MainScreenActivity(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(   // TODO:  нужно добавить  TextField
+        TextField(   // readyTODO:  нужно добавить  TextField
             value = text,
             onValueChange = { text = it },
             label = { Text("Введите текст") }
@@ -59,7 +59,7 @@ fun MainScreenActivity(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
-                // TODO:  нужно добавить кнопку которая по клику открывает второе активити через интент
+                // readyTODO: нужно добавить кнопку которая по клику открывает второе активити через интент
                 val intent = Intent(context, SecondActivity::class.java).apply{
                     putExtra("text_data", text)
                 }
