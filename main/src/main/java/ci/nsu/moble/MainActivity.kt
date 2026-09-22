@@ -32,6 +32,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.TextField
 import android.content.Intent
 import kotlin.jvm.java
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import ci.nsu.moble.ShoppingViewModel
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Row
+
+import androidx.compose.foundation.layout.fillMaxWidth
+
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Checkbox
+import androidx.compose.ui.unit.sp
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,32 +58,58 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(innerPadding)
                 )
             }
-    }
-}
-
-@Composable
-fun MyAppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(content = content)
-}
-
-@Composable
-fun MyScreen(modifier: Modifier = Modifier) {
-    var text by remember { mutableStateOf("") }
-    Column(
-        modifier = modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Продукт") }
-            )
         }
-        Button(
-            onClick = {},
-            modifier = Modifier.padding(top = 16.dp)
+    }
+
+    @Composable
+    fun MyAppTheme(content: @Composable () -> Unit) {
+        MaterialTheme(content = content)
+    }
+
+    @Composable
+    fun MyScreen (modifier: Modifier = Modifier) {
+        var newItemText by remember { mutableStateOf("") }
+        val viewModel: ShoppingViewModel = viewModel()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        Column(
+            modifier = modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Добавить")
+            TextField(
+                value = newItemText,
+                onValueChange = { text ->
+                    newItemText = text
+                    // Синхронизируем с ViewModel (чтобы addItem видел актуальный текст)
+                    viewModel.onNewItemTextChanged(text)
+                },
+                label = { Text("Продукт") }
+            )
+            Button(
+                onClick = {viewModel.addItem()},
+            ) {
+                Text("Добавить")
+            }
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+
+                items (uiState.items, key = { it.id }) { item ->
+                    Row( horizontalArrangement = Arrangement.SpaceBetween,){
+                    Text(text = item.name)
+
+                    Checkbox(
+                        checked = item.isBought,
+                        onCheckedChange = { viewModel.toggleItemBought(item.id) }
+                    )
+                    Button(
+                        onClick = { viewModel.deleteItem(item.id) }
+                    ) {
+                        Text("Удалить")
+                    }
+                }
+                }
+            }
         }
     }
 }
