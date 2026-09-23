@@ -26,6 +26,12 @@
             android:label="@string/title_activity_vvod_data"
             android:theme="@style/Theme.Draft"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".VvodData2"
+            android:exported="false"
+            android:label="@string/title_activity_vvod_data2"
+            android:theme="@style/Theme.Draft"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
